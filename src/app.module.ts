@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PresentationModule } from './presentation/presentation.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
+import { DataModule } from './data/data.module';
+import {MetricEntity} from "./data/entities/metric.entity";
 
 @Module({
   imports: [
@@ -16,8 +18,9 @@ import {TypeOrmModule} from "@nestjs/typeorm";
       database: "green_yellow",
       synchronize: true,
       logging: true,
-      entities: [],
+      entities: [MetricEntity],
     }),
+    DataModule,
   ],
   controllers: [AppController],
   providers: [AppService],
