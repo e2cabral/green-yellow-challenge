@@ -5,6 +5,7 @@ import { PresentationModule } from './presentation/presentation.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataModule } from './data/data.module';
 import { MetricEntity } from './data/entities/metric.entity';
+import { DomainModule } from './domain/domain.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { MetricEntity } from './data/entities/metric.entity';
       entities: [MetricEntity],
     }),
     DataModule,
+    DomainModule,
   ],
   controllers: [AppController],
   providers: [AppService],

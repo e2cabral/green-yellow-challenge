@@ -6,5 +6,6 @@ import { MetricEntity } from './entities/metric.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([MetricEntity])],
   providers: [MetricsRepository],
+  exports: [MetricsRepository],
 })
 export class DataModule {}
