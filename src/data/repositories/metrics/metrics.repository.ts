@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MetricEntity } from '../../entities/metric.entity';
-import { Repository } from 'typeorm';
 import { MetricDTO } from '../../../presentation/dtos/metric.dto';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class MetricsRepository {
@@ -12,6 +12,11 @@ export class MetricsRepository {
   ) {}
 
   async createMany(metricDto: MetricDTO[]) {
-    await this.metricRepository.save(metricDto);
+    await this.metricRepository
+      .createQueryBuilder()
+      .insert()
+      .into(MetricEntity)
+      .values(metricDto)
+      .execute();
   }
 }

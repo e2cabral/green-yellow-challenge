@@ -6,6 +6,23 @@ import { MetricDTO } from '../../../presentation/dtos/metric.dto';
 export class MetricsService {
   constructor(private readonly metricsRepository: MetricsRepository) {}
   async createMany(metricsDto: MetricDTO[]) {
-    await this.metricsRepository.createMany(metricsDto);
+    const total = metricsDto.length;
+    const itemsPerRoundOfInsert = 100;
+    const rounds = Math.ceil(total / itemsPerRoundOfInsert);
+
+    for (let i = 0; i <= rounds; i++) {
+      if (i === 0) {
+        await this.metricsRepository.createMany(
+          metricsDto.slice(i, itemsPerRoundOfInsert),
+        );
+      } else {
+        await this.metricsRepository.createMany(
+          metricsDto.slice(
+            i * itemsPerRoundOfInsert,
+            (i + 1) * itemsPerRoundOfInsert,
+          ),
+        );
+      }
+    }
   }
 }
