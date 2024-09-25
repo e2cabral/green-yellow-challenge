@@ -1,5 +1,5 @@
 export interface MetricDTO {
-    metricId: string;
-    dateTime: string;
-    value: string;
+  metricId: string;
+  dateTime: string;
+  value: string;
 }
