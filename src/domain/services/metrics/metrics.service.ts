@@ -25,4 +25,23 @@ export class MetricsService {
       }
     }
   }
+
+  async getByAggregationAndDate(
+    metricId: string,
+    aggregation: string,
+    startDate: string,
+    endDate: string,
+  ) {
+    return (
+      await this.metricsRepository.getByAggregationAndDate(
+        metricId,
+        aggregation,
+        startDate,
+        endDate,
+      )
+    ).map(({ aggregation, value }) => ({
+      date: new Date(aggregation).toISOString().split('T')[0],
+      value,
+    }));
+  }
 }
