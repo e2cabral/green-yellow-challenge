@@ -1,9 +1,12 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
+  Query,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -11,12 +14,13 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { parse } from 'papaparse';
 import { MetricsService } from '../../../domain/services/metrics/metrics.service';
 import { MetricDTO } from '../../dtos/metric.dto';
+import { Response } from 'express';
 
 @Controller('metrics')
 export class MetricsController {
   constructor(private readonly metricsService: MetricsService) {}
 
-  @Post()
+  @Post('import')
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor('metrics'))
   async upload(@UploadedFile() file: Express.Multer.File) {
@@ -64,5 +68,33 @@ export class MetricsController {
       query.startDate,
       query.endDate,
     );
+  }
+
+  @Get('export')
+  @HttpCode(HttpStatus.OK)
+  async export(
+    @Query()
+    query: {
+      metricId: string;
+      aggregation: string;
+      startDate: string;
+      endDate: string;
+    },
+    @Res() res: Response,
+  ) {
+    const file = await this.metricsService.export(
+      query.metricId,
+      query.aggregation,
+      query.startDate,
+      query.endDate,
+    );
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename=${query.metricId}-${query.startDate}-${query.endDate}-aggregations.csv`,
+    );
+
+    res.send(file);
   }
 }

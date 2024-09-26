@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MetricsRepository } from '../../../data/repositories/metrics/metrics.repository';
 import { MetricDTO } from '../../../presentation/dtos/metric.dto';
+import { unparse } from 'papaparse';
 
 @Injectable()
 export class MetricsService {
@@ -43,5 +44,23 @@ export class MetricsService {
       date: new Date(aggregation).toISOString().split('T')[0],
       value,
     }));
+  }
+
+  async export(
+    metricId: string,
+    aggregation: string,
+    startDate: string,
+    endDate: string,
+  ) {
+    const data = await this.metricsRepository.export(
+      metricId,
+      aggregation,
+      startDate,
+      endDate,
+    );
+
+    return unparse(data, {
+      header: true,
+    });
   }
 }
