@@ -46,15 +46,9 @@ export class MetricsService {
     }));
   }
 
-  async export(
-    metricId: string,
-    aggregation: string,
-    startDate: string,
-    endDate: string,
-  ) {
+  async export(metricId: string, startDate: string, endDate: string) {
     const data = await this.metricsRepository.export(
       metricId,
-      aggregation,
       startDate,
       endDate,
     );

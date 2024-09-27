@@ -13,7 +13,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { parse } from 'papaparse';
 import { MetricsService } from '../../../domain/services/metrics/metrics.service';
-import { MetricDTO } from '../../dtos/metric.dto';
+import { AggregationsDTO, ExportDTO, MetricDTO } from '../../dtos/metric.dto';
 import { Response } from 'express';
 
 @Controller('metrics')
@@ -55,12 +55,7 @@ export class MetricsController {
   @HttpCode(HttpStatus.OK)
   async getMetricsAggregated(
     @Body()
-    query: {
-      metricId: string;
-      aggregation: string;
-      startDate: string;
-      endDate: string;
-    },
+    query: AggregationsDTO,
   ) {
     return this.metricsService.getByAggregationAndDate(
       query.metricId,
@@ -74,17 +69,11 @@ export class MetricsController {
   @HttpCode(HttpStatus.OK)
   async export(
     @Query()
-    query: {
-      metricId: string;
-      aggregation: string;
-      startDate: string;
-      endDate: string;
-    },
+    query: ExportDTO,
     @Res() res: Response,
   ) {
     const file = await this.metricsService.export(
       query.metricId,
-      query.aggregation,
       query.startDate,
       query.endDate,
     );

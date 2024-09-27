@@ -44,12 +44,7 @@ export class MetricsRepository {
       .getRawMany();
   }
 
-  async export(
-    metricId: string,
-    aggregation: string,
-    startDate: string,
-    endDate: string,
-  ) {
+  async export(metricId: string, startDate: string, endDate: string) {
     const promiseAggregateByDay = this.getAggregateByDay(
       startDate,
       endDate,
